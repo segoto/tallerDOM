@@ -1,51 +1,6 @@
 const url =
   "https://gist.githubusercontent.com/josejbocanegra/b1873c6b7e732144355bb1627b6895ed/raw/d91df4c8093c23c41dce6292d5c1ffce0f01a68b/newDatalog.json";
 
-  const punto1 = (data) => {
-  let tableBodyPunto1 = document
-    .getElementById("punto1")
-    .getElementsByTagName("tbody")[0];
-  data.forEach((element, index) => {
-    let row = document.createElement("tr");
-    if (element.squirrel) row.classList.add('table-danger');
-    let th = document.createElement("th");
-    th.setAttribute("scope", "row");
-    th.appendChild(document.createTextNode(`${index + 1}`));
-    let events = document.createElement("td");
-    events.appendChild(document.createTextNode(`${element.events.toString()}`));
-    let squirrel = document.createElement("td");
-    squirrel.appendChild(document.createTextNode(`${element.squirrel}`));
-    row.appendChild(th);
-    row.appendChild(events);
-    row.appendChild(squirrel);
-    tableBodyPunto1.appendChild(row);
-  });
-};
-
-const punto2 = (data) => {
-  let setUniqueValues = uniqueValues(data);
-  setValuesForCorrelations(data, setUniqueValues);
-  let correlationArray = setUniqueValues.map(calculateCorrelation)
-    .sort((a, b)=>b.correlation - a.correlation);
-  let tableBodyPunto2 = document
-    .getElementById("punto2")
-    .getElementsByTagName("tbody")[0];
-  correlationArray.forEach((element, index) => {
-    let row = document.createElement("tr");
-    let th = document.createElement("th");
-    th.setAttribute("scope", "row");
-    th.appendChild(document.createTextNode(`${index + 1}`));
-    let events = document.createElement("td");
-    events.appendChild(document.createTextNode(`${element.event}`));
-    let correlation = document.createElement("td");
-    correlation.appendChild(document.createTextNode(`${element.correlation}`));
-    row.appendChild(th);
-    row.appendChild(events);
-    row.appendChild(correlation);
-    tableBodyPunto2.appendChild(row);
-  });
-};
-
 const uniqueValues = (data) => {
   return data.reduce((acc, val) => {
     val.events.forEach((event) => {
@@ -84,6 +39,52 @@ const calculateCorrelation = (data) => {
     (TP * TN - FP * FN) /
     Math.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN));
   return { event: data.event, correlation };
+};
+
+const punto1 = (data) => {
+  let tableBodyPunto1 = document
+    .getElementById("punto1")
+    .getElementsByTagName("tbody")[0];
+  data.forEach((element, index) => {
+    let row = document.createElement("tr");
+    if (element.squirrel) row.classList.add("table-danger");
+    let th = document.createElement("th");
+    th.setAttribute("scope", "row");
+    th.appendChild(document.createTextNode(`${index + 1}`));
+    let events = document.createElement("td");
+    events.appendChild(document.createTextNode(`${element.events.toString()}`));
+    let squirrel = document.createElement("td");
+    squirrel.appendChild(document.createTextNode(`${element.squirrel}`));
+    row.appendChild(th);
+    row.appendChild(events);
+    row.appendChild(squirrel);
+    tableBodyPunto1.appendChild(row);
+  });
+};
+
+const punto2 = (data) => {
+  let setUniqueValues = uniqueValues(data);
+  setValuesForCorrelations(data, setUniqueValues);
+  let correlationArray = setUniqueValues
+    .map(calculateCorrelation)
+    .sort((a, b) => b.correlation - a.correlation);
+  let tableBodyPunto2 = document
+    .getElementById("punto2")
+    .getElementsByTagName("tbody")[0];
+  correlationArray.forEach((element, index) => {
+    let row = document.createElement("tr");
+    let th = document.createElement("th");
+    th.setAttribute("scope", "row");
+    th.appendChild(document.createTextNode(`${index + 1}`));
+    let events = document.createElement("td");
+    events.appendChild(document.createTextNode(`${element.event}`));
+    let correlation = document.createElement("td");
+    correlation.appendChild(document.createTextNode(`${element.correlation}`));
+    row.appendChild(th);
+    row.appendChild(events);
+    row.appendChild(correlation);
+    tableBodyPunto2.appendChild(row);
+  });
 };
 
 fetch(url)
